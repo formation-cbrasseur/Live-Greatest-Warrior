@@ -52,5 +52,20 @@ namespace GreatestWarrior.Tests
 
             Assert.AreEqual(expectedLevel, _warrior.Level);
         }
+
+        [TestMethod]
+        [DataRow(5, Rank.Pushover)]
+        [DataRow(9, Rank.Pushover)]
+        [DataRow(10, Rank.Novice)]
+        [DataRow(55, Rank.Sage)]
+        [DataRow(99, Rank.Master)]
+        [DataRow(100, Rank.Greatest)]
+        public void WarriorRank_ShouldBeBasedOnLevel(int actualLevel, Rank expectedRank)
+        {
+            _warrior.Level = actualLevel;
+            _warrior.UpdateRank();
+
+            Assert.AreEqual(expectedRank, _warrior.Rank);
+        }
     }
 }
