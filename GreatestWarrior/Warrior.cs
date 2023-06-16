@@ -12,6 +12,7 @@ namespace GreatestWarrior
         public int Experience { get; set; }
         public Rank Rank { get; set; }
         public List<string> Achievments { get; set; }
+        public int ExperienceByLevel = 100;
 
         public Warrior()
         {
@@ -20,6 +21,19 @@ namespace GreatestWarrior
             Rank = Rank.Pushover;
             Achievments = new List<string>();
         }
+
+        public void UpdateLevel()
+        {
+            if (Experience <= 10000)
+                Level = (int)Decimal.Truncate(Experience / ExperienceByLevel);
+            else
+                Level = 100;
+        }
+
+        //public void Battle(int level)
+        //{
+
+        //}
 
         public int CountAchievments()
         {
