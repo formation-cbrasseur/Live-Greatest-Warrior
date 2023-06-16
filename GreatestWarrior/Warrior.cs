@@ -36,11 +36,36 @@ namespace GreatestWarrior
             Rank = (Rank) actualEnumValue;
         }
 
-        //public void Battle(int level)
-        //{
+        public string Battle(int enemyLevel)
+        {
+            if (Level - enemyLevel >= 2)
+            {
+                return "Easy fight";
+            } 
+            else if (Level - enemyLevel == 1) 
+            {
+                Experience += 5;
+                return "Good fight";
+            }
+            else if (Level == enemyLevel)
+            {
+                Experience += 10;
+                return "Good fight";
+            }
+            else if (Level - enemyLevel <= -5)
+            {
+                // Boolean fin de jeu
+                return "Battle lost";
+            }
+            else if (Level - enemyLevel < 0)
+            {
+                Experience += 20 * (Level - enemyLevel) * (Level - enemyLevel);
+                return "Intense fight";
+            }
 
-        //}
-        
+            return "Case unhandled";
+        }
+
         public void Training(string achievment, int experienceEarned)
         {
             Experience += experienceEarned;
