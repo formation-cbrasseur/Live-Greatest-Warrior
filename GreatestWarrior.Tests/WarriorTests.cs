@@ -52,5 +52,16 @@ namespace GreatestWarrior.Tests
 
             Assert.AreEqual(expectedLevel, _warrior.Level);
         }
+
+        [TestMethod]
+        [DataRow(100, "Defeat a slime")]
+        [DataRow(9000, "Defeat Chuck Norris")]
+        public void WarriorExperienceAndAchievments_AreCorrectlyModifiedAfterTraining(int experienceEarned, string achievmentLabel)
+        {
+            _warrior.Training(achievmentLabel, experienceEarned);
+
+            Assert.AreEqual(experienceEarned + 100, _warrior.Experience);
+            Assert.AreEqual(achievmentLabel, _warrior.Achievments.First());
+        }
     }
 }

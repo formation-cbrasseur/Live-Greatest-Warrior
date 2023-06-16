@@ -34,6 +34,12 @@ namespace GreatestWarrior
         //{
 
         //}
+        
+        public void Training(string achievment, int experienceEarned)
+        {
+            Experience += experienceEarned;
+            Achievments.Add(achievment);
+        }
 
         public int CountAchievments()
         {
