@@ -30,6 +30,12 @@ namespace GreatestWarrior
                 Level = 100;
         }
 
+        public void UpdateRank()
+        {
+            var actualEnumValue = (int) Decimal.Truncate(Level / 10) + 1;
+            Rank = (Rank) actualEnumValue;
+        }
+
         //public void Battle(int level)
         //{
 
