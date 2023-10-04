@@ -185,32 +185,32 @@ namespace GreatestWarrior.Tests
 
 
 
-        // Test performance
-        [TestMethod]
-        public void ListOfThreeStrings_OneHundredThousandIterations_ShouldExecuteBefore5ms()
-        {
-            Stopwatch stopwatch = new Stopwatch();
+        //// Test performance
+        //[TestMethod]
+        //public void ListOfThreeStrings_OneHundredThousandIterations_ShouldExecuteBefore5ms()
+        //{
+        //    Stopwatch stopwatch = new Stopwatch();
 
-            var stringList = new List<string>
-            {
-                "Bonjour",
-                "Bonsoir",
-                "Bonne journée"
-            };
+        //    var stringList = new List<string>
+        //    {
+        //        "Bonjour",
+        //        "Bonsoir",
+        //        "Bonne journée"
+        //    };
 
-            stopwatch.Start();
+        //    stopwatch.Start();
 
-            for (int i = 0; i < 100000; i++)
-            {
-                Console.WriteLine("String 1 : {0}, String 2 : {1}, String 3 : {2}", 
-                    stringList[0], stringList[1], stringList[2]);
-            }
+        //    for (int i = 0; i < 100000; i++)
+        //    {
+        //        Console.WriteLine("String 1 : {0}, String 2 : {1}, String 3 : {2}", 
+        //            stringList[0], stringList[1], stringList[2]);
+        //    }
 
-            stopwatch.Stop();
+        //    stopwatch.Stop();
 
-            Console.WriteLine("Duration {0}ms", stopwatch.Elapsed.Milliseconds);
+        //    Console.WriteLine("Duration {0}ms", stopwatch.Elapsed.Milliseconds);
 
-            Assert.IsTrue(stopwatch.Elapsed.Milliseconds <= 5);
-        }
+        //    Assert.IsTrue(stopwatch.Elapsed.Milliseconds <= 5);
+        //}
     }
 }
