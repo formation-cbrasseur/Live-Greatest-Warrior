@@ -1,4 +1,7 @@
+using System.Diagnostics;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GreatestWarrior.Tests
 {
@@ -47,9 +50,13 @@ namespace GreatestWarrior.Tests
         [DataRow(11000, 100)]
         public void WarriorLevel_ShouldBeBasedOnExperience(int actualExperience, int expectedLevel)
         {
+            // Arrange
             _warrior.Experience = actualExperience;
+
+            // Action
             _warrior.UpdateLevel();
 
+            // Assert
             Assert.AreEqual(expectedLevel, _warrior.Level);
         }
 
@@ -76,7 +83,134 @@ namespace GreatestWarrior.Tests
             _warrior.Training(achievmentLabel, experienceEarned);
 
             Assert.AreEqual(experienceEarned + 100, _warrior.Experience);
+            Assert.AreEqual(1, _warrior.Achievments.Count);
             Assert.AreEqual(achievmentLabel, _warrior.Achievments.First());
+        }
+
+        [TestMethod]
+        [DataRow(50)]
+        [DataRow(90)]
+        [DataRow(990)]
+        [DataRow(5000)]
+        [DataRow(10000)]
+        public void WarriorExperienceIsXEnemyLevelIsEqual_Battle_WarriorEarn10XP(int warriorExperience)
+        {
+            _warrior.Experience = warriorExperience;
+            _warrior.UpdateLevel();
+
+            var enemyLevel = _warrior.Level;
+
+            _warrior.Battle(enemyLevel);
+
+            Assert.AreEqual(warriorExperience + 10, _warrior.Experience);
+        }
+
+        [TestMethod]
+
+        [DataRow(50, 2)]
+        [DataRow(90, 5)]
+        [DataRow(990, 10)]
+        [DataRow(5000, 2)]
+        [DataRow(10000, 7)]
+        public void WarriorExperienceIsXEnemyLevelIsLowerByTwoOrMore_Battle_WarriorEarnNoExperience(int warriorExperience
+            , int enemySubstractLevel)
+        {
+            _warrior.Experience = warriorExperience;
+            _warrior.UpdateLevel();
+
+            var enemyLevel = _warrior.Level - enemySubstractLevel;
+
+            _warrior.Battle(enemyLevel);
+
+            Assert.AreEqual(warriorExperience, _warrior.Experience);
+        }
+
+        [TestMethod]
+        [DataRow(90)]
+        [DataRow(990)]
+        [DataRow(5000)]
+        [DataRow(10000)]
+        public void WarriorExperienceIsXEnemyLevelIsLowerByOne_Battle_WarriorEarn5Experience(int warriorExperience)
+        {
+            _warrior.Experience = warriorExperience;
+            _warrior.UpdateLevel();
+
+            var enemyLevel = _warrior.Level - 1;
+
+            _warrior.Battle(enemyLevel);
+
+            Assert.AreEqual(warriorExperience + 5, _warrior.Experience);
+        }
+
+        [TestMethod]
+        [DataRow(90, 3)]
+        [DataRow(990, 4)]
+        [DataRow(5000, 3)]
+        [DataRow(10000, 4)]
+        public void WarriorExperienceIsXEnemyLevelIsGreaterThanTwoButLessThanFive_Battle_WarriorEarnExperienceFormula(
+            int warriorExperience,
+            int enemyAdditionalLevel)
+        {
+            _warrior.Experience = warriorExperience;
+            _warrior.UpdateLevel();
+
+            var enemyLevel = _warrior.Level + enemyAdditionalLevel;
+
+            _warrior.Battle(enemyLevel);
+            Assert.AreEqual(warriorExperience + 20 * (_warrior.Level - enemyLevel) * (_warrior.Level - enemyLevel)
+                , _warrior.Experience);
+        }
+
+        [TestMethod]
+        [DataRow(90, 5)]
+        [DataRow(990, 7)]
+        [DataRow(5000, 9)]
+        [DataRow(10000, 5)]
+        public void WarriorExperienceIsXEnemyLevelIsGreaterByFiveOrMore_Battle_BattleIsEnded(int warriorExperience
+            , int enemyAdditionalLevel)
+        {
+            _warrior.Experience = warriorExperience;
+            _warrior.UpdateLevel();
+
+            var enemyLevel = _warrior.Level + enemyAdditionalLevel;
+
+            _warrior.Battle(enemyLevel);
+
+            Assert.IsTrue(_warrior.GetIsEnded());
+        }
+
+        // TODO: Faire quelques tests fonctionnels (multiples batailles check XP / batailles + training
+        // bataille + end / batailles jusqu'à rank max)
+
+
+
+
+        // Test performance
+        [TestMethod]
+        public void ListOfThreeStrings_OneHundredThousandIterations_ShouldExecuteBefore5ms()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            var stringList = new List<string>
+            {
+                "Bonjour",
+                "Bonsoir",
+                "Bonne journée"
+            };
+
+            stopwatch.Start();
+
+            for (int i = 0; i < 100000; i++)
+            {
+                Console.WriteLine("String 1 : {0}, String 2 : {1}, String 3 : {2}", 
+                    stringList[0], stringList[1], stringList[2]);
+            }
+
+            stopwatch.Stop();
+
+            Console.WriteLine("Duration {0}ms", stopwatch.Elapsed.Milliseconds);
+
+            Assert.IsTrue(stopwatch.Elapsed.Milliseconds <= 5);
         }
     }
 }

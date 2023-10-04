@@ -12,7 +12,8 @@ namespace GreatestWarrior
         public int Experience { get; set; }
         public Rank Rank { get; set; }
         public List<string> Achievments { get; set; }
-        public int ExperienceByLevel = 100;
+        private const int _experienceByLevel = 100;
+        private bool IsEnded = false;
 
         public Warrior()
         {
@@ -25,15 +26,14 @@ namespace GreatestWarrior
         public void UpdateLevel()
         {
             if (Experience <= 10000)
-                Level = (int)Decimal.Truncate(Experience / ExperienceByLevel);
+                Level = (int)Decimal.Truncate(Experience / _experienceByLevel);
             else
                 Level = 100;
         }
 
         public void UpdateRank()
         {
-            var actualEnumValue = (int) Decimal.Truncate(Level / 10) + 1;
-            Rank = (Rank) actualEnumValue;
+            Rank = (Rank) Decimal.Truncate(Level / 10) + 1;
         }
 
         public string Battle(int enemyLevel)
@@ -54,7 +54,7 @@ namespace GreatestWarrior
             }
             else if (Level - enemyLevel <= -5)
             {
-                // Boolean fin de jeu
+                IsEnded = true;
                 return "Battle lost";
             }
             else if (Level - enemyLevel < 0)
@@ -66,10 +66,17 @@ namespace GreatestWarrior
             return "Case unhandled";
         }
 
+        // La méthode d'entrainement a été grandement simplifiée dans ce corrigé
+        // TODO: à faire complètement
         public void Training(string achievment, int experienceEarned)
         {
             Experience += experienceEarned;
             Achievments.Add(achievment);
+        }
+
+        public bool GetIsEnded()
+        {
+            return IsEnded;
         }
 
         public int CountAchievments()
